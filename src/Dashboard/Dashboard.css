@@ -1,0 +1,26 @@
+.section-user-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.user-heading {
+  text-transform: uppercase;
+  font-size: 6.4rem;
+}
+
+.user-paragraph {
+  margin-top: 1.5rem;
+  margin-bottom: 3.4rem;
+  max-width: 60rem;
+}
+
+.book-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.book-img {
+  width: 800px;
+}
