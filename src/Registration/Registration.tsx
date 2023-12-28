@@ -1,31 +1,48 @@
 import { NavLink } from "react-router-dom";
-import { ErrorMessage, Field, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
+import bcrypt from "bcryptjs";
 
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 
 import "./Registration.css";
 import { getCharacterValidationError } from "../Shared/helper";
+import { RegistrationType } from "../Types/User.type";
+
 
 export const Registration = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const initialValues = {
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+  };
+
+  const saveUserDetails = (values: RegistrationType) => {
+    const hashedPassword = bcrypt.hashSync(
+      values.password,
+      "$2a$10$CwTycUXWue0Thq9StjUM0u"
+    ); // hash created previously created upon sign up
+
+    const updatedUserDetails = {
+      ...values,
+      password: hashedPassword,
+    };
+
+    localStorage.setItem("UserDetails", JSON.stringify(updatedUserDetails));
+  };
 
   return (
     <div className="container">
       <div className="background-image" />
       <div className="wrapper">
         <Formik
-          initialValues={{
-            email: "",
-            password: "",
-            firstName: "",
-            lastName: "",
-          }}
-          onSubmit={(values) => {
-            console.log(values);
-          }}
+          initialValues={initialValues}
+          onSubmit={saveUserDetails}
           validationSchema={Yup.object({
             email: Yup.string()
               .email()
@@ -43,7 +60,7 @@ export const Registration = () => {
             lastName: Yup.string().required("Last Name is Required"),
           })}
         >
-          <form action="">
+          <Form>
             <h2>Registration</h2>
 
             <div className="input-box">
@@ -84,7 +101,7 @@ export const Registration = () => {
               <p className="registration-message">Existing User</p>
               <NavLink to="/login">Login</NavLink>
             </div>
-          </form>
+          </Form>
         </Formik>
       </div>
     </div>

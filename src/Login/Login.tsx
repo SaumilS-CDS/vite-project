@@ -1,7 +1,8 @@
-import { NavLink } from "react-router-dom";
-import { ErrorMessage, Field, Formik } from "formik";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ErrorMessage, Field, Formik, Form } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
+import bcrypt from "bcryptjs";
 
 // Icons
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
@@ -13,8 +14,23 @@ import { getCharacterValidationError } from "../Shared/helper";
 // CSS
 import "./Login.css";
 
+// Types
+import { LoginType } from "../Types/User.type";
+
 export const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const validateUser = (values: LoginType) => {
+    const userDetails = JSON.parse(localStorage.getItem("UserDetails") || "");
+    const passwordMatch = bcrypt.compareSync(
+      values.password,
+      userDetails.password
+    );
+    if (passwordMatch && userDetails.email === values.email) {
+      navigate("/");
+    }
+  };
 
   return (
     <div className="container">
@@ -25,9 +41,7 @@ export const Login = () => {
             email: "",
             password: "",
           }}
-          onSubmit={(values) => {
-            console.log(values);
-          }}
+          onSubmit={validateUser}
           validationSchema={Yup.object({
             email: Yup.string()
               .email()
@@ -43,11 +57,7 @@ export const Login = () => {
               .matches(/[A-Z]/, getCharacterValidationError("uppercase")),
           })}
         >
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-            }}
-          >
+          <Form>
             <h2>Login</h2>
             <div className="input-box">
               <Field type="text" placeholder="Email" name="email" />
@@ -71,13 +81,13 @@ export const Login = () => {
             </div>
             <ErrorMessage name="password" component="div" className="error" />
 
-            <button type="submit">Login</button>
+            <button>Login</button>
 
             <div className="registration-link">
               <p className="registration-message">Don't have account</p>{" "}
               <NavLink to="/register">Register</NavLink>
             </div>
-          </form>
+          </Form>
         </Formik>
       </div>
     </div>
