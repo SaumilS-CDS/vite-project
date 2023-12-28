@@ -28,6 +28,7 @@ export const Login = () => {
       userDetails.password
     );
     if (passwordMatch && userDetails.email === values.email) {
+      sessionStorage.setItem("isLoggedIn", "LOGGED_IN");
       navigate("/");
     }
   };
