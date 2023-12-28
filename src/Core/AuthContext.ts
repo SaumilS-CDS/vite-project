@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 import { RegistrationType } from '../Types/User.type';
 
-export interface AuthContextProps {
+export type AuthContextProps = {
   user: RegistrationType | null;
   isAuthenticated?: boolean;
   isLoading?: boolean;
