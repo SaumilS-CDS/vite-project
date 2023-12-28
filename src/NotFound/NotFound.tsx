@@ -1,4 +1,4 @@
-import "./NotFound.css";
+import "./NotFound.module.css";
 
 export const NotFound = () => (
   <div className="container">

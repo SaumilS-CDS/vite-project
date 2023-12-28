@@ -1,7 +1,12 @@
-.section-user-data {
+
+.wrapper {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
+}
+
+.section-user-data {
+  width: 30%;
 }
 
 .user-heading {
@@ -19,8 +24,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 70%;
 }
 
-.book-img {
-  width: 800px;
+img {
+  width: 100%;
 }

@@ -12,10 +12,11 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { getCharacterValidationError } from "../Shared/helper";
 
 // CSS
-import "./Login.css";
+import css from "./Login.module.css";
 
 // Types
 import { LoginType } from "../Types/User.type";
+import classNames from "classnames";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -34,9 +35,9 @@ export const Login = () => {
   };
 
   return (
-    <div className="container">
-      <div className="background-image" />
-      <div className="wrapper">
+    <div className={css.container}>
+      <div className={css.backgroundImage} />
+      <div className={css.wrapper}>
         <Formik
           initialValues={{
             email: "",
@@ -60,14 +61,14 @@ export const Login = () => {
         >
           <Form>
             <h2>Login</h2>
-            <div className="input-box">
+            <div className={css.inputBox}>
               <Field type="text" placeholder="Email" name="email" />
-              <PersonRoundedIcon fontSize="medium" className="icon" />
+              <PersonRoundedIcon fontSize="medium" className={css.icon} />
             </div>
 
             <ErrorMessage name="email" component="div" className="error" />
 
-            <div className="input-box">
+            <div className={css.inputBox}>
               <Field
                 name="password"
                 type={showPassword ? "text" : "password"}
@@ -75,17 +76,17 @@ export const Login = () => {
               />
               <div onClick={() => setShowPassword((prev) => !prev)}>
                 <LockRoundedIcon
-                  fontSize="medium"
-                  className="icon visible-password"
+                  fontSize="small"
+                  className={classNames(css.icon, css.visiblePassword)}
                 />
               </div>
             </div>
-            <ErrorMessage name="password" component="div" className="error" />
+            <ErrorMessage name="password" component="div" className={css.error} />
 
             <button>Login</button>
 
-            <div className="registration-link">
-              <p className="registration-message">Don't have account</p>{" "}
+            <div className={css.registrationLink}>
+              <p className={css.registrationMessage}>Don't have account</p>{" "}
               <NavLink to="/register">Register</NavLink>
             </div>
           </Form>

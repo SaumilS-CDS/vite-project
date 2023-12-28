@@ -2,17 +2,17 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import classNames from "classnames";
-import "./Navbar.css";
+import css from "./Navbar.module.css";
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
 
   return (
-    <div className={classNames("menuIcon", { active: openMenu })}>
-      <ul className="navbar-list">
+    <div className={classNames(css.menuIcon, { [css.active]: openMenu })}>
+      <ul className={css["navbar-list"]}>
         <li>
           <NavLink
-            className="navbar-link"
+            className={css["navbar-link"]}
             onClick={() => setOpenMenu(false)}
             to="/"
           >
@@ -21,7 +21,7 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            className="navbar-link"
+            className={css["navbar-link"]}
             onClick={() => setOpenMenu(false)}
             to="/about"
           >

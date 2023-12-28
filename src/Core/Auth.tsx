@@ -18,7 +18,7 @@ export const Auth = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [setIsLoading, setUser, setIsAuthenticated]);
 
   const logout = useCallback(() => {
     sessionStorage.removeItem("isLoggedIn");
@@ -30,7 +30,7 @@ export const Auth = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     getUserDetails();
-  }, [user]);
+  }, [getUserDetails]);
 
   const values = useMemo(() => {
     return {
@@ -40,7 +40,7 @@ export const Auth = ({ children }: { children: React.ReactNode }) => {
       login,
       logout,
     };
-  }, []);
+  }, [user, isLoading, isAuthenticated, login, logout]);
 
   return <AuthProvider value={values}>{children}</AuthProvider>;
 };

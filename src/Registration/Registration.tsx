@@ -7,10 +7,11 @@ import bcrypt from "bcryptjs";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 
-import "./Registration.css";
+import css from "./Registration.module.css";
+
 import { getCharacterValidationError } from "../Shared/helper";
 import { RegistrationType } from "../Types/User.type";
-
+import classNames from "classnames";
 
 export const Registration = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -37,9 +38,9 @@ export const Registration = () => {
   };
 
   return (
-    <div className="container">
-      <div className="background-image" />
-      <div className="wrapper">
+    <div className={css.container}>
+      <div className={css["background-image"]} />
+      <div className={css.wrapper}>
         <Formik
           initialValues={initialValues}
           onSubmit={saveUserDetails}
@@ -63,24 +64,32 @@ export const Registration = () => {
           <Form>
             <h2>Registration</h2>
 
-            <div className="input-box">
+            <div className={css["input-box"]}>
               <Field type="text" placeholder="First Name" name="firstName" />
             </div>
-            <ErrorMessage name="firstName" component="div" className="error" />
+            <ErrorMessage
+              name="firstName"
+              component="div"
+              className={css.error}
+            />
 
-            <div className="input-box">
+            <div className={css["input-box"]}>
               <Field type="text" placeholder="Last Name" name="lastName" />
             </div>
-            <ErrorMessage name="lastName" component="div" className="error" />
+            <ErrorMessage
+              name="lastName"
+              component="div"
+              className={css.error}
+            />
 
-            <div className="input-box">
+            <div className={css["input-box"]}>
               <Field type="text" placeholder="Email" name="email" />
-              <PersonRoundedIcon fontSize="medium" className="icon" />
+              <PersonRoundedIcon fontSize="medium" className={css.icon} />
             </div>
 
-            <ErrorMessage name="email" component="div" className="error" />
+            <ErrorMessage name="email" component="div" className={css.error} />
 
-            <div className="input-box">
+            <div className={css["input-box"]}>
               <Field
                 placeholder="Password"
                 name="password"
@@ -88,17 +97,21 @@ export const Registration = () => {
               />
               <div onClick={() => setShowPassword((prev) => !prev)}>
                 <LockRoundedIcon
-                  fontSize="medium"
-                  className="icon visible-password"
+                  fontSize="small"
+                  className={classNames(css.icon, css["visible-password"])}
                 />
               </div>
             </div>
-            <ErrorMessage name="password" component="div" className="error" />
+            <ErrorMessage
+              name="password"
+              component="div"
+              className={css.error}
+            />
 
             <button type="submit">Register</button>
 
-            <div className="registration-link">
-              <p className="registration-message">Existing User</p>
+            <div className={css["registration-link"]}>
+              <p className={css["registration-message"]}>Existing User</p>
               <NavLink to="/login">Login</NavLink>
             </div>
           </Form>
