@@ -12,6 +12,8 @@ export const AuthRoute = () => {
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
+    } else {
+      navigate("/login")
     }
   }, []);
 

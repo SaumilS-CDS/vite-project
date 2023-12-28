@@ -101,3 +101,9 @@
   color: rgb(201, 9, 9);
   font-size: 16px;
 }
+
+.disabled {
+  background-color: #cccccc !important;
+  color: #666666;
+}
+

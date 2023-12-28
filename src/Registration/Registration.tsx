@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
@@ -14,6 +14,8 @@ import { RegistrationType } from "../Types/User.type";
 import classNames from "classnames";
 
 export const Registration = () => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const initialValues = {
@@ -23,18 +25,25 @@ export const Registration = () => {
     lastName: "",
   };
 
-  const saveUserDetails = (values: RegistrationType) => {
-    const hashedPassword = bcrypt.hashSync(
-      values.password,
-      "$2a$10$CwTycUXWue0Thq9StjUM0u"
-    ); // hash created previously created upon sign up
+  const saveUserDetails = async (values: RegistrationType) => {
+    try {
+      const hashedPassword = bcrypt.hashSync(
+        values.password,
+        "$2a$10$CwTycUXWue0Thq9StjUM0u"
+      ); // hash created previously created upon sign up
 
-    const updatedUserDetails = {
-      ...values,
-      password: hashedPassword,
-    };
+      const updatedUserDetails = {
+        ...values,
+        password: hashedPassword,
+      };
 
-    localStorage.setItem("UserDetails", JSON.stringify(updatedUserDetails));
+      // Adding 4s delay to show loader like API calls.
+      await new Promise((resolve) => setTimeout(resolve, 4000));
+      localStorage.setItem("UserDetails", JSON.stringify(updatedUserDetails));
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -61,60 +70,71 @@ export const Registration = () => {
             lastName: Yup.string().required("Last Name is Required"),
           })}
         >
-          <Form>
-            <h2>Registration</h2>
+          {({ isSubmitting }) => (
+            <Form>
+              <h2>Registration</h2>
 
-            <div className={css["input-box"]}>
-              <Field type="text" placeholder="First Name" name="firstName" />
-            </div>
-            <ErrorMessage
-              name="firstName"
-              component="div"
-              className={css.error}
-            />
-
-            <div className={css["input-box"]}>
-              <Field type="text" placeholder="Last Name" name="lastName" />
-            </div>
-            <ErrorMessage
-              name="lastName"
-              component="div"
-              className={css.error}
-            />
-
-            <div className={css["input-box"]}>
-              <Field type="text" placeholder="Email" name="email" />
-              <PersonRoundedIcon fontSize="medium" className={css.icon} />
-            </div>
-
-            <ErrorMessage name="email" component="div" className={css.error} />
-
-            <div className={css["input-box"]}>
-              <Field
-                placeholder="Password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-              />
-              <div onClick={() => setShowPassword((prev) => !prev)}>
-                <LockRoundedIcon
-                  fontSize="small"
-                  className={classNames(css.icon, css["visible-password"])}
-                />
+              <div className={css["input-box"]}>
+                <Field type="text" placeholder="First Name" name="firstName" />
               </div>
-            </div>
-            <ErrorMessage
-              name="password"
-              component="div"
-              className={css.error}
-            />
+              <ErrorMessage
+                name="firstName"
+                component="div"
+                className={css.error}
+              />
 
-            <button type="submit">Register</button>
+              <div className={css["input-box"]}>
+                <Field type="text" placeholder="Last Name" name="lastName" />
+              </div>
+              <ErrorMessage
+                name="lastName"
+                component="div"
+                className={css.error}
+              />
 
-            <div className={css["registration-link"]}>
-              <p className={css["registration-message"]}>Existing User</p>
-              <NavLink to="/login">Login</NavLink>
-            </div>
-          </Form>
+              <div className={css["input-box"]}>
+                <Field type="text" placeholder="Email" name="email" />
+                <PersonRoundedIcon fontSize="medium" className={css.icon} />
+              </div>
+
+              <ErrorMessage
+                name="email"
+                component="div"
+                className={css.error}
+              />
+
+              <div className={css["input-box"]}>
+                <Field
+                  placeholder="Password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                />
+                <div onClick={() => setShowPassword((prev) => !prev)}>
+                  <LockRoundedIcon
+                    fontSize="small"
+                    className={classNames(css.icon, css["visible-password"])}
+                  />
+                </div>
+              </div>
+              <ErrorMessage
+                name="password"
+                component="div"
+                className={css.error}
+              />
+
+              <button
+                className={isSubmitting ? css.disabled : ""}
+                disabled={isSubmitting}
+              >
+                Register
+              </button>
+
+              <div className={css["registration-link"]}>
+                <p className={css["registration-message"]}>Existing User</p>
+                <NavLink to="/login">Login</NavLink>
+              </div>
+            </Form>
+          )}
         </Formik>
       </div>
     </div>
