@@ -5,9 +5,8 @@ import { BookType } from "../Types/Book.type";
 export const Book = ({ children }: { children: React.ReactNode }) => {
   const [booksList, setBooksList] = useState<BookType[]>([]);
 
-  const addBookToList = (newBook: BookType) => {
+  const addBookToList = (newBook: BookType) =>
     setBooksList((prev) => [...prev, newBook]);
-  };
 
   const deleteBookToList = (id: string) => {
     const remainingBookList = booksList.filter((book) => book.id !== id);

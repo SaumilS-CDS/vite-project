@@ -1,0 +1,39 @@
+.inputWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  gap: 16px;
+}
+
+label {
+  font-weight: bold;
+  color: #333;
+  font-size: 20px;
+  width: 150px;
+}
+
+input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  font-size: 15px;
+  width: 100%;
+}
+
+input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.error {
+  color: rgb(201, 9, 9);
+  font-size: 12px;
+}
+
+.inputError {
+    width: 500px;
+}

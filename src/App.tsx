@@ -4,6 +4,7 @@ import { Header } from "./Components/Header/Header";
 import { Dashboard } from "./Dashboard/Dashboard";
 import { NotFound } from "./NotFound/NotFound";
 import { Login } from "./Login/Login";
+import { BookModal } from "./Components/BookModal/BookModal";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
+      <BookModal />
     </>
   );
 };
