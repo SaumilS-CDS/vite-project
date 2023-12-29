@@ -14,17 +14,23 @@ const bookDetails1 = {
 import { Button } from "@mui/material";
 import css from "./BookDetail.module.css";
 import { BookModal } from "../Components/BookModal/BookModal";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useBooks } from "../Core/BookContext";
 import { useState } from "react";
+import { CustomDialog } from "../Components/DialogBox/DialogBox";
 
 export const BookDetail = () => {
   const { id } = useParams();
 
-  const { bookList } = useBooks();
+  const { bookList, deleteBookToList } = useBooks();
+
+  const navigate = useNavigate();
+
   console.log(bookList);
 
   const [isOpenSaveBookModal, setIsOpenSaveBookModal] =
+    useState<boolean>(false);
+  const [isOpenConfirmationModal, setIsOpenConfirmationModal] =
     useState<boolean>(false);
 
   const bookDetails = bookList.find(
@@ -59,7 +65,12 @@ export const BookDetail = () => {
           >
             Edit
           </Button>
-          <Button variant="contained" color="error" className={css.delete}>
+          <Button
+            variant="contained"
+            color="error"
+            className={css.delete}
+            onClick={() => setIsOpenConfirmationModal(true)}
+          >
             Delete
           </Button>
         </div>
@@ -71,6 +82,33 @@ export const BookDetail = () => {
         isOpenModal={isOpenSaveBookModal}
         changedIsOpenModal={() => setIsOpenSaveBookModal((prev) => !prev)}
       />
+
+      {isOpenConfirmationModal && (
+        <CustomDialog
+          title="Delete confirmation"
+          content={
+            <p className={css.confirmationMessage}>
+              Are you sure you want to delete this book?
+            </p>
+          }
+          actions={
+            <Button
+              variant="contained"
+              color="error"
+              className={css.delete}
+              onClick={() => {
+                if (id) {
+                  deleteBookToList(id);
+                  navigate("/");
+                }
+              }}
+            >
+              Delete
+            </Button>
+          }
+          onClose={() => setIsOpenConfirmationModal(false)}
+        />
+      )}
     </>
   );
 };

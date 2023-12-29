@@ -144,7 +144,7 @@ export const BookModal = ({
             </div>
           </DialogContent>
           <DialogActions>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting} variant="contained">
               Save Book
             </Button>
           </DialogActions>
@@ -158,7 +158,6 @@ export const BookModal = ({
       {isOpenModal && (
         <CustomDialog
           title="Register a book"
-
           content={dialogContent}
           onClose={changedIsOpenModal}
         />

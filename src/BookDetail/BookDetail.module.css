@@ -61,3 +61,8 @@ td {
 .delete {
   color: red;
 }
+
+.confirmationMessage {
+  font-size: 18px;
+  font-weight: 500;
+}
