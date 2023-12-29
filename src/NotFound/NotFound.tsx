@@ -1,7 +1,7 @@
-import "./NotFound.module.css";
+import css from "./NotFound.module.css";
 
 export const NotFound = () => (
-  <div className="container">
-    <div className="icon" />
+  <div className={css.container}>
+    <div className={css.icon} />
   </div>
 );

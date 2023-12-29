@@ -28,6 +28,7 @@
 
 .description {
   color: #666;
+  text-align: center;
 }
 
 .details-title {
@@ -59,7 +60,7 @@ td {
 }
 
 .delete {
-  color: red;
+  margin-top: 40px;
 }
 
 .confirmationMessage {

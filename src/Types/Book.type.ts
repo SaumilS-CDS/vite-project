@@ -3,10 +3,10 @@ export type BookType = {
   name: string;
   author: string;
   genre: string;
-  publishedYear: number;
   description: string;
   price: number;
   quantity: number;
   language: string;
   publisher: string;
+  rating: number;
 };

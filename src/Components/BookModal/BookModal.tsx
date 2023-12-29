@@ -14,6 +14,9 @@ import css from "./BookModal.module.css";
 import { BookType } from "../../Types/Book.type";
 import { Snackbar } from "@mui/material";
 import { CustomDialog } from "../DialogBox/DialogBox";
+import { DropDown } from "../DropDown/DropDown";
+
+import { BOOK_LANGUAGES, GENRES } from "../../../assets/utils/constants";
 
 type BookModalType = {
   isEditMode?: boolean;
@@ -32,21 +35,36 @@ export const BookModal = ({
 
   const [showToast, setShowToast] = useState<boolean>(false);
 
-  const { name, description, price, category, quantity, rating, id } =
-    bookData || {};
+  const {
+    name,
+    author,
+    description,
+    price,
+    quantity,
+    id,
+    genre,
+    publisher,
+    rating,
+    language,
+  } = bookData || {};
 
   const initialBookState = {
     name: name || "",
+    author: author || "",
     description: description || "",
     price: price || 0,
-    category: category || "",
+    genre: genre || GENRES[0],
     quantity: quantity || 0,
-    rating: rating || 0,
     id: isEditMode ? id : nanoid(),
+    publisher: publisher || "",
+    rating: rating || 0,
+    language: language || BOOK_LANGUAGES[0],
   };
 
   const saveBook = async (values: BookType) => {
     try {
+      console.log('called');
+      
       // Adding 4s delay to show loader like API calls.
       await new Promise((resolve) => setTimeout(resolve, 4000));
 
@@ -84,6 +102,19 @@ export const BookModal = ({
     </div>
   );
 
+  const InputWithDropdown = ({
+    fieldName,
+    dropdownOptions,
+  }: {
+    fieldName: string;
+    dropdownOptions: string[];
+  }) => (
+    <div className={css.inputError}>
+      <DropDown options={dropdownOptions} fieldName={fieldName} />
+      <ErrorMessage name={fieldName} component="div" className={css.error} />
+    </div>
+  );
+
   const dialogContent = (
     <Formik
       initialValues={initialBookState}
@@ -93,9 +124,13 @@ export const BookModal = ({
         description: string()
           .max(150, "Maximum 150 character allowed")
           .required("Book description is Required"),
+        author: string().required("Author name is Required"),
+        genre: string().required("Genre is required"),
+        language: string().required("Language is required"),
         price: number().required("Price is required"),
-        category: string().required("Category is required"),
         quantity: number().required("Quantity is required"),
+        publisher: string().required("Publisher name is Required"),
+        rating: string().required("Rating name is Required"),
       })}
     >
       {({ isSubmitting }) => (
@@ -107,8 +142,18 @@ export const BookModal = ({
             </div>
 
             <div className={css.inputWrapper}>
+              <label className={css.label}>Author</label>
+              <InputWrapper fieldName="author" fieldType="text" />
+            </div>
+
+            <div className={css.inputWrapper}>
               <label className={css.label}>Description</label>
               <InputWrapper fieldName="description" fieldType="text" />
+            </div>
+
+            <div className={css.inputWrapper}>
+              <label className={css.label}>Genre</label>
+              <InputWithDropdown fieldName="genre" dropdownOptions={GENRES} />
             </div>
 
             <div className={css.inputWrapper}>
@@ -121,17 +166,25 @@ export const BookModal = ({
             </div>
 
             <div className={css.inputWrapper}>
-              <label className={css.label}>Category</label>
-              <InputWrapper fieldName="category" fieldType="text" />
-            </div>
-
-            <div className={css.inputWrapper}>
               <label className={css.label}>Quantity</label>
               <InputWrapper
                 fieldName="quantity"
                 fieldType="number"
                 minMaxValues={[0, 2000]}
               />
+            </div>
+
+            <div className={css.inputWrapper}>
+              <label className={css.label}>Language</label>
+              <InputWithDropdown
+                fieldName="language"
+                dropdownOptions={BOOK_LANGUAGES}
+              />
+            </div>
+
+            <div className={css.inputWrapper}>
+              <label className={css.label}>Publisher</label>
+              <InputWrapper fieldName="publisher" fieldType="text" />
             </div>
 
             <div className={css.inputWrapper}>

@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { BookModal } from "../Components/BookModal/BookModal";
 import { useBooks } from "../Core/BookContext";
 
-
 export const SortAndFilterTable = () => {
   const navigate = useNavigate();
   const { bookList } = useBooks();
@@ -21,8 +20,8 @@ export const SortAndFilterTable = () => {
     { field: "name", sort: "asc" },
   ]);
 
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => {
+    return [
       {
         field: "id",
         headerName: "ID",
@@ -65,13 +64,6 @@ export const SortAndFilterTable = () => {
         disableColumnMenu: true,
       },
       {
-        field: "publishedYear",
-        headerName: "Published Yr",
-        width: 120,
-        sortable: false,
-        disableColumnMenu: true,
-      },
-      {
         field: "genre",
         headerName: "Genre",
         width: 150,
@@ -99,9 +91,15 @@ export const SortAndFilterTable = () => {
         sortable: false,
         disableColumnMenu: true,
       },
-    ],
-    []
-  );
+      {
+        field: "rating",
+        headerName: "Rating",
+        width: 150,
+        sortable: false,
+        disableColumnMenu: true,
+      },
+    ];
+  }, [bookList]);
 
   return (
     <>
@@ -120,7 +118,7 @@ export const SortAndFilterTable = () => {
           </div>
         </div>
         <DataGrid
-          rows={filteredRows}
+          rows={bookList}
           sx={{
             "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
               outline: "none !important",

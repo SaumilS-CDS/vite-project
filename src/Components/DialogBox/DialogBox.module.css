@@ -30,10 +30,6 @@ h2 {
   font-weight: 500;
 }
 
-.dialog-content {
-  margin-bottom: 20px;
-}
-
 .dialog-actions {
   display: flex;
   justify-content: flex-end;
