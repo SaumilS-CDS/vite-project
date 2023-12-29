@@ -11,14 +11,7 @@
   width: 100%;
 }
 
-.userLogo {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  font-size: 19px;
+.actions {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 10px;
-  background-color: red;
+  gap: 8px;
 }

@@ -18,15 +18,6 @@ import css from "./BookModal.module.css";
 import { BookType } from "../../Types/Book.type";
 import { Snackbar } from "@mui/material";
 
-const initialBookState = {
-  name: "",
-  description: "",
-  price: 0,
-  category: "",
-  quantity: 0,
-  rating: 0,
-};
-
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -36,48 +27,83 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export const BookModal = () => {
-  const { addBookToList } = useBooks();
+type BookModalType = {
+  isEditMode?: boolean;
+  bookData?: BookType;
+  isOpenModal: boolean;
+  changedIsOpenModal: () => void;
+};
 
-  const [open, setOpen] = useState<boolean>(false);
+export const BookModal = ({
+  isEditMode = false,
+  bookData,
+  isOpenModal,
+  changedIsOpenModal,
+}: BookModalType) => {
+  const { addBookToList, updateBookToList } = useBooks();
+
   const [showToast, setShowToast] = useState<boolean>(false);
+
+  const { name, description, price, category, quantity, rating, id } =
+    bookData || {};
+
+  const initialBookState = {
+    name: name || "",
+    description: description || "",
+    price: price || 0,
+    category: category || "",
+    quantity: quantity || 0,
+    rating: rating || 0,
+    id: isEditMode ? id : nanoid(),
+  };
 
   const saveBook = async (values: BookType) => {
     try {
       // Adding 4s delay to show loader like API calls.
       await new Promise((resolve) => setTimeout(resolve, 4000));
-      addBookToList({ ...values, id: nanoid() });
+
+      if (isEditMode) {
+        updateBookToList(values);
+      } else {
+        addBookToList(values);
+      }
     } catch (error) {
       console.error(error);
     } finally {
-      setOpen(false);
+      changedIsOpenModal();
     }
   };
 
   const InputWrapper = ({
     fieldName,
     fieldType,
+    minMaxValues = [0, 0],
   }: {
     fieldName: string;
     fieldType: string;
+    minMaxValues?: [number, number];
   }) => (
     <div className={css.inputError}>
-      <Field type={fieldType} name={fieldName} className={css.input} />
+      <Field
+        as={fieldName !== "description" ? "input" : "textarea"}
+        type={fieldType}
+        min={minMaxValues[0]}
+        max={minMaxValues[1]}
+        name={fieldName}
+        className={css.input}
+      />
       <ErrorMessage name={fieldName} component="div" className={css.error} />
     </div>
   );
 
   return (
     <>
-      <Button variant="outlined" onClick={() => setOpen(true)}>
-        Open dialog
-      </Button>
-      <BootstrapDialog open={open} onClose={() => setOpen(false)}>
+      <BootstrapDialog open={isOpenModal} onClose={changedIsOpenModal}>
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           Register a book
         </DialogTitle>
         <IconButton
-          onClick={() => setOpen(false)}
+          onClick={changedIsOpenModal}
           sx={{
             position: "absolute",
             right: 8,
@@ -93,7 +119,7 @@ export const BookModal = () => {
           validationSchema={object({
             name: string().required("Book name is Required"),
             description: string()
-              .max(50, "Maximum 50 character allowed")
+              .max(150, "Maximum 150 character allowed")
               .required("Book description is Required"),
             price: number().required("Price is required"),
             category: string().required("Category is required"),
@@ -115,7 +141,11 @@ export const BookModal = () => {
 
                 <div className={css.inputWrapper}>
                   <label className={css.label}>Price</label>
-                  <InputWrapper fieldName="price" fieldType="number" />
+                  <InputWrapper
+                    fieldName="price"
+                    fieldType="number"
+                    minMaxValues={[0, 10000]}
+                  />
                 </div>
 
                 <div className={css.inputWrapper}>
@@ -125,7 +155,20 @@ export const BookModal = () => {
 
                 <div className={css.inputWrapper}>
                   <label className={css.label}>Quantity</label>
-                  <InputWrapper fieldName="quantity" fieldType="number" />
+                  <InputWrapper
+                    fieldName="quantity"
+                    fieldType="number"
+                    minMaxValues={[0, 2000]}
+                  />
+                </div>
+
+                <div className={css.inputWrapper}>
+                  <label className={css.label}>Rating</label>
+                  <InputWrapper
+                    fieldName="rating"
+                    fieldType="number"
+                    minMaxValues={[0, 5]}
+                  />
                 </div>
               </DialogContent>
               <DialogActions>

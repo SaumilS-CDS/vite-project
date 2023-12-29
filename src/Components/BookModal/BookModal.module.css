@@ -14,7 +14,7 @@ label {
   width: 150px;
 }
 
-input {
+input, textarea {
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -24,7 +24,7 @@ input {
   width: 100%;
 }
 
-input:focus {
+input:focus, textarea:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }

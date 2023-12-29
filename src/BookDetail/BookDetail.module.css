@@ -1,0 +1,63 @@
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  color: #666;
+  line-height: 1.6;
+}
+
+.table-container {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+.author-name {
+  font-size: 30px;
+}
+
+.description {
+  color: #666;
+}
+
+.details-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.details-section {
+  margin-bottom: 20px;
+}
+
+.table-row {
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 2px;
+}
+
+th,
+td {
+  border-radius: 10px;
+}
+
+.actions {
+  align-self: flex-end;
+  display: flex;
+  gap: 5px;
+  margin-top: 15px;
+}
+
+.delete {
+  color: red;
+}

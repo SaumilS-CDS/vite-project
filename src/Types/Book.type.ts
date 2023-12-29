@@ -5,4 +5,5 @@ export type BookType = {
   price: number;
   category: string;
   quantity: number;
+  rating: number;
 };
