@@ -1,9 +1,12 @@
 export type BookType = {
   id?: string;
   name: string;
+  author: string;
+  genre: string;
+  publishedYear: number;
   description: string;
   price: number;
-  category: string;
   quantity: number;
-  rating: number;
+  language: string;
+  publisher: string;
 };

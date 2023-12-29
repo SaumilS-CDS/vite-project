@@ -1,0 +1,33 @@
+.iconButton:focus {
+  outline: none !important;
+}
+
+.books-list-wrapper {
+  margin: auto;
+  padding: 30px;
+  margin: 30px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  font-size: 15px;
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.book-list-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

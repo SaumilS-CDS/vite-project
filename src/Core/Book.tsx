@@ -2,8 +2,37 @@ import { useMemo, useState } from "react";
 import { BookProvider } from "./BookContext";
 import { BookType } from "../Types/Book.type";
 
+// Sample data
+const books = [
+  {
+    id: "1",
+    name: "The Great Gatsby",
+    author: "F. Scott Fitzgerald",
+    genre: "Fiction",
+    publishedYear: 1925,
+    description: "A classic novel that explores the decadence of the Jazz Age.",
+    price: 12,
+    quantity: 50,
+    language: "English",
+    publisher: "Charles Scribner's Sons",
+  },
+  {
+    id: "2",
+    name: "To Kill a Mockingbird",
+    author: "Harper Lee",
+    genre: "Classics",
+    publishedYear: 1960,
+    description:
+      "A poignant novel addressing racial injustice in the American South.",
+    price: 14,
+    quantity: 40,
+    language: "English",
+    publisher: "J.B. Lippincott & Co.",
+  },
+];
+
 export const Book = ({ children }: { children: React.ReactNode }) => {
-  const [booksList, setBooksList] = useState<BookType[]>([]);
+  const [booksList, setBooksList] = useState<BookType[]>(books);
 
   const addBookToList = (newBook: BookType) =>
     setBooksList((prev) => [...prev, newBook]);
