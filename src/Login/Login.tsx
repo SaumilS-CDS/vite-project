@@ -1,15 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { useState } from "react";
-import * as Yup from "yup";
 import bcrypt from "bcryptjs";
 
 // Icons
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
-
-// Helper
-import { getCharacterValidationError } from "../Shared/helper";
 
 // CSS
 import css from "./Login.module.css";
@@ -18,6 +14,7 @@ import css from "./Login.module.css";
 import { LoginType } from "../Types/User.type";
 import classNames from "classnames";
 import { Snackbar } from "@mui/material";
+import { LoginValidationSchema } from "../../assets/utils/constants";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -57,20 +54,7 @@ export const Login = () => {
               password: "",
             }}
             onSubmit={validateUser}
-            validationSchema={Yup.object({
-              email: Yup.string()
-                .email()
-                .required("Email is Required")
-                .matches(/^(?!.*@[^,]*,)/),
-              password: Yup.string()
-                .required("Password is Required")
-                // check minimum characters
-                .min(8, "Password must have at least 8 characters")
-                // different error messages for different requirements
-                .matches(/[0-9]/, getCharacterValidationError("digit"))
-                .matches(/[a-z]/, getCharacterValidationError("lowercase"))
-                .matches(/[A-Z]/, getCharacterValidationError("uppercase")),
-            })}
+            validationSchema={LoginValidationSchema}
           >
             {({ isSubmitting }) => (
               <Form>

@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
-import * as Yup from "yup";
 import bcrypt from "bcryptjs";
 
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
@@ -9,9 +8,9 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 
 import css from "./Registration.module.css";
 
-import { getCharacterValidationError } from "../Shared/helper";
 import { RegistrationType } from "../Types/User.type";
 import classNames from "classnames";
+import { RegistrationValidationSchema } from "../../assets/utils/constants";
 
 export const Registration = () => {
   const navigate = useNavigate();
@@ -53,22 +52,7 @@ export const Registration = () => {
         <Formik
           initialValues={initialValues}
           onSubmit={saveUserDetails}
-          validationSchema={Yup.object({
-            email: Yup.string()
-              .email()
-              .required("Email is Required")
-              .matches(/^(?!.*@[^,]*,)/),
-            password: Yup.string()
-              .required("Password is Required")
-              // check minimum characters
-              .min(8, "Password must have at least 8 characters")
-              // different error messages for different requirements
-              .matches(/[0-9]/, getCharacterValidationError("digit"))
-              .matches(/[a-z]/, getCharacterValidationError("lowercase"))
-              .matches(/[A-Z]/, getCharacterValidationError("uppercase")),
-            firstName: Yup.string().required("First Name is Required"),
-            lastName: Yup.string().required("Last Name is Required"),
-          })}
+          validationSchema={RegistrationValidationSchema}
         >
           {({ isSubmitting }) => (
             <Form>
