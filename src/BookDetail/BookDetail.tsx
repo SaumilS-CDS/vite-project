@@ -71,7 +71,6 @@ export const BookDetail = () => {
         isOpenModal={isOpenSaveBookModal}
         changedIsOpenModal={() => setIsOpenSaveBookModal((prev) => !prev)}
       />
-      
     </>
   );
 };
