@@ -37,3 +37,7 @@ input:focus, textarea:focus {
 .inputError {
     width: 500px;
 }
+
+.content {
+  max-height: 500px;
+}

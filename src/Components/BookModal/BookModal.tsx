@@ -25,6 +25,54 @@ type BookModalType = {
   changedIsOpenModal: () => void;
 };
 
+type InputType = {
+  label: string;
+  name: string;
+  type: string;
+  dropdownOptions?: string[];
+  minMaxValues?: [number, number];
+};
+
+const inputFields: InputType[] = [
+  { label: "Name", name: "name", type: "text" },
+  { label: "Author", name: "author", type: "text" },
+  { label: "Description", name: "description", type: "text" },
+  { label: "Genre", name: "genre", type: "dropdown", dropdownOptions: GENRES },
+  { label: "Price", name: "price", type: "number", minMaxValues: [0, 10000] },
+  {
+    label: "Quantity",
+    name: "quantity",
+    type: "number",
+    minMaxValues: [0, 2000],
+  },
+  {
+    label: "Language",
+    name: "language",
+    type: "dropdown",
+    dropdownOptions: BOOK_LANGUAGES,
+  },
+  { label: "Publisher", name: "publisher", type: "text" },
+  { label: "Rating", name: "rating", type: "number", minMaxValues: [0, 5] },
+];
+
+const validationSchema = object({
+  name: string().required("Book name is Required"),
+  description: string()
+    .max(150, "Maximum 150 character allowed")
+    .required("Book description is Required"),
+  author: string().required("Author name is Required"),
+  genre: string().required("Genre is required"),
+  language: string().required("Language is required"),
+  price: number()
+    .max(10000, "Price must be less than 10,000")
+    .required("Price is required"),
+  quantity: number()
+    .max(200, "Quantities can't be greater than 2000")
+    .required("Quantity is required"),
+  publisher: string().required("Publisher name is Required"),
+  rating: string().required("Rating name is Required"),
+});
+
 export const BookModal = ({
   isEditMode = false,
   bookData,
@@ -63,8 +111,6 @@ export const BookModal = ({
 
   const saveBook = async (values: BookType) => {
     try {
-      console.log('called');
-      
       // Adding 4s delay to show loader like API calls.
       await new Promise((resolve) => setTimeout(resolve, 4000));
 
@@ -115,86 +161,45 @@ export const BookModal = ({
     </div>
   );
 
+  const InputField = ({
+    label,
+    name,
+    type,
+    dropdownOptions = [],
+    minMaxValues = [0, 0],
+  }: {
+    label: string;
+    name: string;
+    type: string;
+    dropdownOptions?: string[];
+    minMaxValues?: [number, number];
+  }) => (
+    <div className={css.inputWrapper}>
+      <label className={css.label}>{label}</label>
+      {type === "dropdown" ? (
+        <InputWithDropdown fieldName={name} dropdownOptions={dropdownOptions} />
+      ) : (
+        <InputWrapper
+          fieldName={name}
+          fieldType={type}
+          minMaxValues={minMaxValues}
+        />
+      )}
+    </div>
+  );
+
   const dialogContent = (
     <Formik
       initialValues={initialBookState}
       onSubmit={saveBook}
-      validationSchema={object({
-        name: string().required("Book name is Required"),
-        description: string()
-          .max(150, "Maximum 150 character allowed")
-          .required("Book description is Required"),
-        author: string().required("Author name is Required"),
-        genre: string().required("Genre is required"),
-        language: string().required("Language is required"),
-        price: number().required("Price is required"),
-        quantity: number().required("Quantity is required"),
-        publisher: string().required("Publisher name is Required"),
-        rating: string().required("Rating name is Required"),
-      })}
+      validationSchema={validationSchema}
     >
       {({ isSubmitting }) => (
         <Form>
-          <DialogContent dividers>
-            <div className={css.inputWrapper}>
-              <label className={css.label}>Name</label>
-              <InputWrapper fieldName="name" fieldType="text" />
-            </div>
-
-            <div className={css.inputWrapper}>
-              <label className={css.label}>Author</label>
-              <InputWrapper fieldName="author" fieldType="text" />
-            </div>
-
-            <div className={css.inputWrapper}>
-              <label className={css.label}>Description</label>
-              <InputWrapper fieldName="description" fieldType="text" />
-            </div>
-
-            <div className={css.inputWrapper}>
-              <label className={css.label}>Genre</label>
-              <InputWithDropdown fieldName="genre" dropdownOptions={GENRES} />
-            </div>
-
-            <div className={css.inputWrapper}>
-              <label className={css.label}>Price</label>
-              <InputWrapper
-                fieldName="price"
-                fieldType="number"
-                minMaxValues={[0, 10000]}
-              />
-            </div>
-
-            <div className={css.inputWrapper}>
-              <label className={css.label}>Quantity</label>
-              <InputWrapper
-                fieldName="quantity"
-                fieldType="number"
-                minMaxValues={[0, 2000]}
-              />
-            </div>
-
-            <div className={css.inputWrapper}>
-              <label className={css.label}>Language</label>
-              <InputWithDropdown
-                fieldName="language"
-                dropdownOptions={BOOK_LANGUAGES}
-              />
-            </div>
-
-            <div className={css.inputWrapper}>
-              <label className={css.label}>Publisher</label>
-              <InputWrapper fieldName="publisher" fieldType="text" />
-            </div>
-
-            <div className={css.inputWrapper}>
-              <label className={css.label}>Rating</label>
-              <InputWrapper
-                fieldName="rating"
-                fieldType="number"
-                minMaxValues={[0, 5]}
-              />
-            </div>
+          <DialogContent dividers className={css.content}>
+            {inputFields.map((field) => (
+              <InputField key={field.name} {...field} />
+            ))}
           </DialogContent>
           <DialogActions>
             <Button type="submit" disabled={isSubmitting} variant="contained">
