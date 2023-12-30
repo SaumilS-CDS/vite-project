@@ -1,47 +1,39 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BookProvider } from "./BookContext";
+import { BOOK_STORAGE_KEY } from "./StorageConstant";
+
+import { staticBookData } from "../../assets/utils/dummyBooksList";
+
 import { BookType } from "../Types/Book.type";
 
-// Sample data
-const books = [
-  {
-    id: "1",
-    name: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    genre: "Fiction",
-    description: "A classic novel that explores the decadence of the Jazz Age.",
-    price: 12,
-    quantity: 50,
-    rating: 3,
-    language: "English",
-    publisher: "Charles Scribner's Sons",
-  },
-  {
-    id: "2",
-    name: "To Kill a Mockingbird",
-    author: "Harper Lee",
-    genre: "Classics",
-    description:
-      "A poignant novel addressing racial injustice in the American South.",
-    price: 14,
-    rating: 3,
-    quantity: 40,
-    language: "English",
-    publisher: "J.B. Lippincott & Co.",
-  },
-];
-
 export const Book = ({ children }: { children: React.ReactNode }) => {
-  const [booksList, setBooksList] = useState<BookType[]>(books);
+  const [booksList, setBooksList] = useState<BookType[]>([]);
 
-  const addBookToList = (newBook: BookType) =>
-    setBooksList((prev) => [...prev, newBook]);
+  /**
+   *
+   * @param newBook: New Book to save
+   */
+  const addBookToList = (newBook: BookType) => {
+    // appending the newBook to existing book list
+    const newBooksList = [...booksList, newBook];
+    setBooksList(newBooksList);
+    localStorage.setItem(BOOK_STORAGE_KEY, JSON.stringify(newBooksList));
+  };
 
+  /**
+   *
+   * @param id: Id for the book to delete
+   */
   const deleteBookToList = (id: string) => {
     const remainingBookList = booksList.filter((book) => book.id !== id);
     setBooksList(remainingBookList);
+    localStorage.setItem(BOOK_STORAGE_KEY, JSON.stringify(remainingBookList));
   };
 
+  /**
+   *
+   * @param updatedBookData: Updated Book object
+   */
   const updateBookToList = (updatedBookData: BookType) => {
     const booksCopy = [...booksList];
     const bookIndexToUpdate = booksList.findIndex(
@@ -49,6 +41,7 @@ export const Book = ({ children }: { children: React.ReactNode }) => {
     );
     booksCopy[bookIndexToUpdate] = updatedBookData;
     setBooksList(booksCopy);
+    localStorage.setItem(BOOK_STORAGE_KEY, JSON.stringify(booksCopy));
   };
 
   const values = useMemo(() => {
@@ -59,6 +52,21 @@ export const Book = ({ children }: { children: React.ReactNode }) => {
       updateBookToList,
     };
   }, [booksList, addBookToList, deleteBookToList, updateBookToList]);
+
+  useEffect(() => {
+    // When page loads getting books from local storage.
+    const localStorageBooks = localStorage.getItem(BOOK_STORAGE_KEY);
+
+    if (localStorageBooks === null) {
+      // If Local storage doesn't have key set then it will set book data.
+      localStorage.setItem(BOOK_STORAGE_KEY, JSON.stringify(staticBookData));
+      setBooksList([...staticBookData]);
+    } else {
+      // If Local storage have the value then fetch it from there.
+      const fromBookData = JSON.parse(localStorageBooks || "");
+      setBooksList([...fromBookData]);
+    }
+  }, []);
 
   return <BookProvider value={values}>{children}</BookProvider>;
 };

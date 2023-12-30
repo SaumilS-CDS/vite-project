@@ -36,8 +36,8 @@
   margin-top: 15px;
 }
 
-.delete {
-  margin-top: 40px;
+.deleteButton {
+  margin-top: 20px !important;
 }
 
 .confirmationMessage {

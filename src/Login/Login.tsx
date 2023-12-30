@@ -15,6 +15,7 @@ import { LoginType } from "../Types/User.type";
 import classNames from "classnames";
 import { Alert, Snackbar } from "@mui/material";
 import { LoginValidationSchema } from "../../assets/utils/constants";
+import { USER_STORAGE_KEY } from "../Core/StorageConstant";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -25,7 +26,7 @@ export const Login = () => {
   const validateUser = async (values: LoginType) => {
     try {
       // Validating the user entered password and email
-      const userDetails = JSON.parse(localStorage.getItem("UserDetails") || "");
+      const userDetails = JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || "");
       const passwordMatch = bcrypt.compareSync(
         values.password,
         userDetails.password

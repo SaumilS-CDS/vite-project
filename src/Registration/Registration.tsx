@@ -12,6 +12,7 @@ import { RegistrationType } from "../Types/User.type";
 import classNames from "classnames";
 import { RegistrationValidationSchema } from "../../assets/utils/constants";
 import { Alert, Snackbar } from "@mui/material";
+import { USER_STORAGE_KEY } from "../Core/StorageConstant";
 
 const initialValues = {
   email: "",
@@ -29,7 +30,7 @@ export const Registration = () => {
   const saveUserDetails = async (values: RegistrationType) => {
     try {
       const user: RegistrationType = JSON.parse(
-        localStorage.getItem("UserDetails") || ""
+        localStorage.getItem(USER_STORAGE_KEY) || ""
       );
 
       // checking if email already registered.
@@ -49,7 +50,7 @@ export const Registration = () => {
 
       // Adding 4s delay to show loader like API calls.
       await new Promise((resolve) => setTimeout(resolve, 4000));
-      localStorage.setItem("UserDetails", JSON.stringify(updatedUserDetails));
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(updatedUserDetails));
       navigate("/login");
     } catch (error) {
       console.error(error);

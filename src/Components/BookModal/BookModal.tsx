@@ -11,11 +11,16 @@ import DialogActions from "@mui/material/DialogActions";
 
 import css from "./BookModal.module.css";
 import { BookType } from "../../Types/Book.type";
-import { Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import { CustomDialog } from "../DialogBox/DialogBox";
 import { DropDown } from "../DropDown/DropDown";
 
-import { BOOK_LANGUAGES, BookFields, BookValidationSchema, GENRES } from "../../../assets/utils/constants";
+import {
+  BOOK_LANGUAGES,
+  BookFields,
+  BookValidationSchema,
+  GENRES,
+} from "../../../assets/utils/constants";
 
 type BookModalType = {
   isEditMode?: boolean;
@@ -38,7 +43,7 @@ const InputField = ({
   type,
   dropdownOptions = [],
   minMaxValues = [0, 0],
-}: InputType) => (  
+}: InputType) => (
   <div className={css.inputWrapper}>
     <div className={css.label}>{label}</div>
     <div className={css.inputError}>
@@ -80,7 +85,7 @@ export const BookModal = ({
     publisher,
     rating,
     language,
-    publishedAt
+    publishedAt,
   } = bookData || {};
 
   const initialBookState = {
@@ -94,7 +99,7 @@ export const BookModal = ({
     publisher: publisher || "",
     rating: rating || null,
     language: language || BOOK_LANGUAGES[0],
-    publishedAt: publishedAt || null
+    publishedAt: publishedAt || null,
   };
 
   const saveBook = async (values: BookType) => {
@@ -107,6 +112,7 @@ export const BookModal = ({
       } else {
         addBookToList(values);
       }
+      setShowToast(true);
     } catch (error) {
       console.error(error);
     } finally {
@@ -151,10 +157,15 @@ export const BookModal = ({
         open={showToast}
         className={css.snackbar}
         sx={{ width: "100%" }}
-        autoHideDuration={4000}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        autoHideDuration={6000}
         onClose={() => setShowToast(false)}
         message="Book Saved Successfully"
-      />
+      >
+        <Alert severity="success" onClose={() => setShowToast(false)}>
+          Book Saved Successfully
+        </Alert>
+      </Snackbar>
     </>
   );
 };

@@ -16,7 +16,9 @@ import { useBooks } from "../Core/BookContext";
 import { getComparator } from "../Shared/helper";
 
 export const SortAndFilterTable = () => {
+
   const navigate = useNavigate();
+
   const { bookList } = useBooks();
 
   const [isOpenSaveBookModal, setIsOpenSaveBookModal] =
@@ -26,7 +28,7 @@ export const SortAndFilterTable = () => {
   ]);
   const [searchString, setSearchString] = useState<string>("");
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-    pageSize: 10,
+    pageSize: 5,
     page: 0,
   });
 
@@ -41,7 +43,6 @@ export const SortAndFilterTable = () => {
             <IconButton
               className={css.iconButton}
               onClick={() => {
-                console.log(dataValue);
                 navigate(`/book/${dataValue.id}`);
               }}
             >
@@ -131,6 +132,7 @@ export const SortAndFilterTable = () => {
             <input
               type="text"
               className={css.input}
+              placeholder="Search by book name"
               value={searchString}
               onChange={(event) => setSearchString(event.target.value)}
             />
@@ -153,8 +155,9 @@ export const SortAndFilterTable = () => {
               outline: "none !important",
             },
           }}
-          disableRowSelectionOnClick
-          pageSizeOptions={[5, 10]}
+          rowCount={bookList.length}
+          pageSizeOptions={[5]}
+          paginationModel={paginationModel}
           columns={columns}
           sortingMode="server"
           paginationMode="server"

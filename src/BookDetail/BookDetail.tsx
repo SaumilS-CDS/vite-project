@@ -18,7 +18,7 @@ const defaultState = {
   language: "",
   publisher: "",
   rating: 0,
-  publishedAt: null
+  publishedAt: null,
 };
 
 export const BookDetail = () => {
@@ -32,10 +32,26 @@ export const BookDetail = () => {
     useState<boolean>(false);
   const [isOpenConfirmationModal, setIsOpenConfirmationModal] =
     useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const bookDetails = bookList.find((book) => book.id === id) || defaultState;
 
   const { author } = bookDetails;
+
+  const deleteBook = async () => {
+    try {
+      setIsDeleting(true);
+      await new Promise((resolve) => setTimeout(resolve, 4000));
+      if (id) {
+        deleteBookToList(id);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsDeleting(true);
+    }
+  };
 
   return (
     <>
@@ -92,13 +108,9 @@ export const BookDetail = () => {
             <Button
               variant="contained"
               color="error"
-              className={css.delete}
-              onClick={() => {
-                if (id) {
-                  deleteBookToList(id);
-                  navigate("/");
-                }
-              }}
+              disabled={isDeleting}
+              className={css.deleteButton}
+              onClick={deleteBook}
             >
               Delete
             </Button>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AuthProvider } from "./AuthContext";
 import { RegistrationType } from "../Types/User.type";
+import { USER_STORAGE_KEY } from "./StorageConstant";
 
 export const Auth = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<RegistrationType | null>(null);
@@ -11,7 +12,7 @@ export const Auth = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true);
     try {
       // Getting the UserDetails from local storage
-      const loggedUser = JSON.parse(localStorage.getItem("UserDetails") || "");
+      const loggedUser = JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || "");
       setUser(loggedUser);
       setIsAuthenticated(true);
     } catch (error) {
