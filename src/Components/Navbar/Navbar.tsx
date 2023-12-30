@@ -5,15 +5,17 @@ import classNames from "classnames";
 import css from "./Navbar.module.css";
 
 const Navbar = () => {
-  const [openMenu, setOpenMenu] = useState<boolean>(false);
+  const [selectedTab, setSelectedTab] = useState<string>("home");
 
   return (
-    <div className={classNames(css.menuIcon, { [css.active]: openMenu })}>
+    <div className={css.menuIcon}>
       <ul className={css["navbar-list"]}>
         <li>
           <NavLink
-            className={css["navbar-link"]}
-            onClick={() => setOpenMenu(false)}
+            className={classNames(css["navbar-link"], {
+              [css.active]: selectedTab === "home",
+            })}
+            onClick={() => setSelectedTab("home")}
             to="/"
           >
             Dashboard
@@ -21,8 +23,10 @@ const Navbar = () => {
         </li>
         <li>
           <NavLink
-            className={css["navbar-link"]}
-            onClick={() => setOpenMenu(false)}
+            className={classNames(css["navbar-link"], {
+              [css.active]: selectedTab === "about",
+            })}
+            onClick={() => setSelectedTab("about")}
             to="/about"
           >
             About

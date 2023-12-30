@@ -55,7 +55,7 @@ export const SortAndFilterTable = () => {
       {
         field: "name",
         headerName: "Name",
-        width: 150,
+        width: 200,
         disableColumnMenu: true,
       },
       {
