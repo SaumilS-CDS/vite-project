@@ -2,33 +2,47 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AuthProvider } from "./AuthContext";
 import { RegistrationType } from "../Types/User.type";
 import { USER_STORAGE_KEY } from "./StorageConstant";
+import { useNavigate } from "react-router-dom";
 
 export const Auth = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<RegistrationType | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
+  const navigate = useNavigate();
+
+  const removeCredentials = () => {
+    navigate("/login");
+    sessionStorage.removeItem("isLoggedIn");
+    setIsAuthenticated(false);
+  };
+
   const getUserDetails = useCallback(() => {
-    setIsLoading(true);
     try {
       // Getting the UserDetails from local storage
-      const loggedUser = JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || "");
-      setUser(loggedUser);
-      setIsAuthenticated(true);
+      const loggedUser = localStorage.getItem(USER_STORAGE_KEY);
+
+      if (loggedUser) {
+        const parsedUserData = JSON.parse(loggedUser);
+        setUser(parsedUserData);
+        setIsAuthenticated(true);
+      } else {
+        throw new Error("No user details found");
+      }
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsLoading(false);
+      removeCredentials();
     }
-  }, [setIsLoading, setUser, setIsAuthenticated]);
+  }, [setUser, setIsAuthenticated]);
 
   const logout = useCallback(() => {
-    sessionStorage.removeItem("isLoggedIn");
-  }, []);
+    removeCredentials();
+  }, [setIsAuthenticated]);
 
   const login = useCallback(() => {
     sessionStorage.setItem("isLoggedIn", "LOGGED_IN");
-  }, []);
+    // set authentication as true
+    setIsAuthenticated(true);
+  }, [setIsAuthenticated]);
 
   useEffect(() => {
     getUserDetails();
@@ -37,12 +51,11 @@ export const Auth = ({ children }: { children: React.ReactNode }) => {
   const values = useMemo(() => {
     return {
       user,
-      isLoading,
       isAuthenticated,
       login,
       logout,
     };
-  }, [user, isLoading, isAuthenticated, login, logout]);
+  }, [user, isAuthenticated, login, logout]);
 
   return <AuthProvider value={values}>{children}</AuthProvider>;
 };

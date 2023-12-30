@@ -16,27 +16,42 @@ import classNames from "classnames";
 import { Alert, Snackbar } from "@mui/material";
 import { LoginValidationSchema } from "../../assets/utils/constants";
 import { USER_STORAGE_KEY } from "../Core/StorageConstant";
+import { useAuth } from "../Core/AuthContext";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
+
+  const { login } = useAuth();
 
   const navigate = useNavigate();
 
   const validateUser = async (values: LoginType) => {
     try {
       // Validating the user entered password and email
-      const userDetails = JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || "");
-      const passwordMatch = bcrypt.compareSync(
-        values.password,
-        userDetails.password
-      );
-      // Adding 4s delay to show loader like API calls.
-      await new Promise((resolve) => setTimeout(resolve, 4000));
-      if (passwordMatch && userDetails.email === values.email) {
-        sessionStorage.setItem("isLoggedIn", "LOGGED_IN");
-        navigate("/");
+      const userDetails = localStorage.getItem(USER_STORAGE_KEY);
+
+      // If we already have user registered data in local storage
+      if (userDetails) {
+        const parsedUserDetail = JSON.parse(userDetails);
+
+        const passwordMatch = bcrypt.compareSync(
+          values.password,
+          parsedUserDetail.password
+        );
+        // Adding 4s delay to show loader like API calls.
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+
+        // Check if stored data matches the entered credentials
+        if (passwordMatch && parsedUserDetail.email === values.email) {
+          login(); 
+          navigate("/");
+        } else {
+          // Wrong credentials
+          throw new Error("Wrong credentials");
+        }
       } else {
+        // No user data found in local storage means no user is registered
         throw new Error("Wrong credentials");
       }
     } catch (error) {

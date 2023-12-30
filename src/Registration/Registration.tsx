@@ -12,7 +12,10 @@ import { RegistrationType } from "../Types/User.type";
 import classNames from "classnames";
 import { RegistrationValidationSchema } from "../../assets/utils/constants";
 import { Alert, Snackbar } from "@mui/material";
-import { USER_STORAGE_KEY } from "../Core/StorageConstant";
+import {
+  PASSWORD_ENCRYPTION_KEY,
+  USER_STORAGE_KEY,
+} from "../Core/StorageConstant";
 
 const initialValues = {
   email: "",
@@ -21,40 +24,54 @@ const initialValues = {
   lastName: "",
 };
 
+type ToastType = {
+  showToast: boolean;
+  toastMessage: string;
+};
+
 export const Registration = () => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
+  const [showErrorToast, setShowErrorToast] = useState<ToastType | null>(null);
 
   const saveUserDetails = async (values: RegistrationType) => {
     try {
-      const user: RegistrationType = JSON.parse(
-        localStorage.getItem(USER_STORAGE_KEY) || ""
-      );
+      const user = localStorage.getItem(USER_STORAGE_KEY);
 
-      // checking if email already registered.
-      if (user.email === values.email) {
-        throw new Error("User already registered.");
+      // If we found that user already set in local storage
+      if (user) {
+        const parsedUser = JSON.parse(user);
+
+        // checking if email already registered.
+        if (parsedUser.email === values.email) {
+          throw new Error("User already registered.");
+        }
+      } else {
+        const hashedPassword = bcrypt.hashSync(
+          values.password,
+          PASSWORD_ENCRYPTION_KEY
+        ); // hash created previously created upon sign up
+
+        const updatedUserDetails = {
+          ...values,
+          password: hashedPassword,
+        };
+
+        // Adding 4s delay to show loader like API calls.
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+        localStorage.setItem(
+          USER_STORAGE_KEY,
+          JSON.stringify(updatedUserDetails)
+        );
       }
-
-      const hashedPassword = bcrypt.hashSync(
-        values.password,
-        "$2a$10$CwTycUXWue0Thq9StjUM0u"
-      ); // hash created previously created upon sign up
-
-      const updatedUserDetails = {
-        ...values,
-        password: hashedPassword,
-      };
-
-      // Adding 4s delay to show loader like API calls.
-      await new Promise((resolve) => setTimeout(resolve, 4000));
-      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(updatedUserDetails));
       navigate("/login");
     } catch (error) {
       console.error(error);
-      setShowErrorToast(true);
+      setShowErrorToast({
+        showToast: true,
+        toastMessage: error as string,
+      });
     }
   };
 
@@ -141,17 +158,14 @@ export const Registration = () => {
         </div>
       </div>
       <Snackbar
-        open={showErrorToast}
+        open={showErrorToast?.showToast}
         className={css.snackbar}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         sx={{ width: "100%" }}
         autoHideDuration={4000}
-        onClose={() => setShowErrorToast(false)}
+        onClose={() => setShowErrorToast(null)}
       >
-        <Alert
-          severity="error"
-          onClose={() => setShowErrorToast(false)}
-        >
+        <Alert severity="error" onClose={() => setShowErrorToast(null)}>
           Email already registered.
         </Alert>
       </Snackbar>
