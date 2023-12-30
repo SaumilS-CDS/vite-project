@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useBooks } from "../Core/BookContext";
 import { useState } from "react";
 import { CustomDialog } from "../Components/DialogBox/DialogBox";
+import { BOOK_DETAILS_TO_SHOW } from "../../assets/utils/constants";
 
 const defaultState = {
   id: "",
@@ -16,7 +17,7 @@ const defaultState = {
   quantity: 0,
   language: "",
   publisher: "",
-  rating: 0
+  rating: 0,
 };
 
 export const BookDetail = () => {
@@ -33,27 +34,24 @@ export const BookDetail = () => {
 
   const bookDetails = bookList.find((book) => book.id === id) || defaultState;
 
-  const { description, author } = bookDetails;
+  const { author } = bookDetails;
 
   return (
     <>
       <div className={css.container}>
         <h2 className={css["author-name"]}>{author}</h2>
 
-        <p className={css["description"]}>{description}</p>
-
         <div className="details-section">
           <h3 className={css["details-title"]}>Details</h3>
-          <table className={css["table-container"]}>
-            <tbody>
-              {Object.entries(bookDetails).map(([key, value]) => (
-                <tr key={key}>
-                  <th className={css["table-row"]}>{key}</th>
-                  <td className={css["table-row"]}>{value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+          <div className={css["user-profile"]}>
+            {BOOK_DETAILS_TO_SHOW.map(({ label, value }) => (
+              <div className={css["input-wrapper"]}>
+                <div className={css.label}>{label}</div>
+                <span>{bookDetails[value]}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className={css.actions}>

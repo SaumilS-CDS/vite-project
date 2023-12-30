@@ -103,7 +103,6 @@ export const SortAndFilterTable = () => {
     ];
   }, [bookList]);
 
-
   const visibleRows = useMemo(() => {
     const order = sortModel.length ? sortModel[0].sort : "asc";
     const orderBy = sortModel.length ? sortModel[0].field : "quantity";
@@ -121,7 +120,7 @@ export const SortAndFilterTable = () => {
     <>
       <div className={css["books-list-wrapper"]}>
         <div className={css["book-list-header"]}>
-          <h3>List of Books</h3>
+          <h3 className={css["book-title"]}>List of Books</h3>
           <div>
             <input
               type="text"

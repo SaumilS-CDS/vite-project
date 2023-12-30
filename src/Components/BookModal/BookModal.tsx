@@ -38,9 +38,9 @@ const InputField = ({
   type,
   dropdownOptions = [],
   minMaxValues = [0, 0],
-}: InputType) => (
+}: InputType) => (  
   <div className={css.inputWrapper}>
-    <label className={css.label}>{label}</label>
+    <div className={css.label}>{label}</div>
     <div className={css.inputError}>
       {type === "dropdown" ? (
         <DropDown options={dropdownOptions} fieldName={name} />

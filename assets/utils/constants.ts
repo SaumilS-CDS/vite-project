@@ -1,6 +1,7 @@
 import { number, object, string } from "yup";
 import { InputType } from "../../src/Components/BookModal/BookModal";
 import { getCharacterValidationError } from "../../src/Shared/helper";
+import { BookType } from "../../src/Types/Book.type";
 
 export const GENRES = [
   "Action",
@@ -31,10 +32,12 @@ export const BookValidationSchema = object({
     .max(10000, "Price must be less than 10,000")
     .required("Price is required"),
   quantity: number()
-    .max(200, "Quantities can't be greater than 2000")
+    .max(2000, "Quantities can't be greater than 2000")
     .required("Quantity is required"),
   publisher: string().required("Publisher name is Required"),
-  rating: string().required("Rating name is Required"),
+  rating: number()
+    .max(5, "Rating can't be greater than 5")
+    .required("Rating name is Required"),
 });
 
 // Validation schema for Registration
@@ -93,3 +96,43 @@ export const BookFields: InputType[] = [
   { label: "Publisher", name: "publisher", type: "text" },
   { label: "Rating", name: "rating", type: "number", minMaxValues: [0, 5] },
 ];
+
+export const BOOK_DETAILS_TO_SHOW: { label: string; value: keyof BookType }[] =
+  [
+    {
+      label: "Name",
+      value: "name",
+    },
+    {
+      label: "Author",
+      value: "author",
+    },
+    {
+      label: "Genre",
+      value: "genre",
+    },
+    {
+      label: "Description",
+      value: "description",
+    },
+    {
+      label: "Price",
+      value: "price",
+    },
+    {
+      label: "Quantity",
+      value: "quantity",
+    },
+    {
+      label: "Language",
+      value: "language",
+    },
+    {
+      label: "Publisher",
+      value: "publisher",
+    },
+    {
+      label: "Rating",
+      value: "rating",
+    },
+  ];

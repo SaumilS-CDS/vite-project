@@ -5,9 +5,9 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   border-radius: 5px;
-  margin-top: 150px;
   display: flex;
   flex-direction: column;
+  margin-top: 90px;
 }
 
 .heading {
@@ -15,20 +15,8 @@
   line-height: 1.6;
 }
 
-.table-container {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  border-radius: 4px;
-}
-
 .author-name {
   font-size: 30px;
-}
-
-.description {
-  color: #666;
-  text-align: center;
 }
 
 .details-title {
@@ -39,17 +27,6 @@
 
 .details-section {
   margin-bottom: 20px;
-}
-
-.table-row {
-  border: 1px solid #ddd;
-  padding: 8px;
-  border-radius: 2px;
-}
-
-th,
-td {
-  border-radius: 10px;
 }
 
 .actions {
@@ -66,4 +43,11 @@ td {
 .confirmationMessage {
   font-size: 18px;
   font-weight: 500;
+}
+
+.input-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  font-size: 20px;
+  margin-bottom: 10px;
 }

@@ -1,8 +1,6 @@
 .inputWrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr auto;
   margin-bottom: 15px;
   gap: 16px;
 }

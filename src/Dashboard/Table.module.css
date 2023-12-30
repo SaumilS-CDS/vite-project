@@ -31,3 +31,7 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.book-title {
+  color: #7b88fd;
+}
