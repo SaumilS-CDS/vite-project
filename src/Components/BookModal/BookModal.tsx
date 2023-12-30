@@ -80,19 +80,21 @@ export const BookModal = ({
     publisher,
     rating,
     language,
+    publishedAt
   } = bookData || {};
 
   const initialBookState = {
     name: name || "",
     author: author || "",
     description: description || "",
-    price: price || 0,
+    price: price || null,
     genre: genre || GENRES[0],
     quantity: quantity || 0,
     id: isEditMode ? id : nanoid(),
     publisher: publisher || "",
-    rating: rating || 0,
+    rating: rating || null,
     language: language || BOOK_LANGUAGES[0],
+    publishedAt: publishedAt || null
   };
 
   const saveBook = async (values: BookType) => {

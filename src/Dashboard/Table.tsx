@@ -95,9 +95,15 @@ export const SortAndFilterTable = () => {
         disableColumnMenu: true,
       },
       {
+        field: "publishedAt",
+        headerName: "Published Yr",
+        width: 130,
+        disableColumnMenu: true,
+      },
+      {
         field: "rating",
         headerName: "Rating",
-        width: 150,
+        width: 120,
         disableColumnMenu: true,
       },
     ];

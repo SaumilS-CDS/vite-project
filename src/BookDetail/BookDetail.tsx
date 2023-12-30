@@ -18,6 +18,7 @@ const defaultState = {
   language: "",
   publisher: "",
   rating: 0,
+  publishedAt: null
 };
 
 export const BookDetail = () => {

@@ -11,21 +11,32 @@ import css from "./Registration.module.css";
 import { RegistrationType } from "../Types/User.type";
 import classNames from "classnames";
 import { RegistrationValidationSchema } from "../../assets/utils/constants";
+import { Alert, Snackbar } from "@mui/material";
+
+const initialValues = {
+  email: "",
+  password: "",
+  firstName: "",
+  lastName: "",
+};
 
 export const Registration = () => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  const initialValues = {
-    email: "",
-    password: "",
-    firstName: "",
-    lastName: "",
-  };
+  const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
 
   const saveUserDetails = async (values: RegistrationType) => {
     try {
+      const user: RegistrationType = JSON.parse(
+        localStorage.getItem("UserDetails") || ""
+      );
+
+      // checking if email already registered.
+      if (user.email === values.email) {
+        throw new Error("User already registered.");
+      }
+
       const hashedPassword = bcrypt.hashSync(
         values.password,
         "$2a$10$CwTycUXWue0Thq9StjUM0u"
@@ -42,85 +53,107 @@ export const Registration = () => {
       navigate("/login");
     } catch (error) {
       console.error(error);
+      setShowErrorToast(true);
     }
   };
 
   return (
-    <div className={css.container}>
-      <div className={css["background-image"]} />
-      <div className={css.wrapper}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={saveUserDetails}
-          validationSchema={RegistrationValidationSchema}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <h2>Registration</h2>
+    <>
+      <div className={css.container}>
+        <div className={css["background-image"]} />
+        <div className={css.wrapper}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={saveUserDetails}
+            validationSchema={RegistrationValidationSchema}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <h2>Registration</h2>
 
-              <div className={css["input-box"]}>
-                <Field type="text" placeholder="First Name" name="firstName" />
-              </div>
-              <ErrorMessage
-                name="firstName"
-                component="div"
-                className={css.error}
-              />
-
-              <div className={css["input-box"]}>
-                <Field type="text" placeholder="Last Name" name="lastName" />
-              </div>
-              <ErrorMessage
-                name="lastName"
-                component="div"
-                className={css.error}
-              />
-
-              <div className={css["input-box"]}>
-                <Field type="text" placeholder="Email" name="email" />
-                <PersonRoundedIcon fontSize="medium" className={css.icon} />
-              </div>
-
-              <ErrorMessage
-                name="email"
-                component="div"
-                className={css.error}
-              />
-
-              <div className={css["input-box"]}>
-                <Field
-                  placeholder="Password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                />
-                <div onClick={() => setShowPassword((prev) => !prev)}>
-                  <LockRoundedIcon
-                    fontSize="small"
-                    className={classNames(css.icon, css["visible-password"])}
+                <div className={css["input-box"]}>
+                  <Field
+                    type="text"
+                    placeholder="First Name"
+                    name="firstName"
                   />
                 </div>
-              </div>
-              <ErrorMessage
-                name="password"
-                component="div"
-                className={css.error}
-              />
+                <ErrorMessage
+                  name="firstName"
+                  component="div"
+                  className={css.error}
+                />
 
-              <button
-                className={isSubmitting ? css.disabled : ""}
-                disabled={isSubmitting}
-              >
-                Register
-              </button>
+                <div className={css["input-box"]}>
+                  <Field type="text" placeholder="Last Name" name="lastName" />
+                </div>
+                <ErrorMessage
+                  name="lastName"
+                  component="div"
+                  className={css.error}
+                />
 
-              <div className={css["registration-link"]}>
-                <p className={css["registration-message"]}>Existing User</p>
-                <NavLink to="/login">Login</NavLink>
-              </div>
-            </Form>
-          )}
-        </Formik>
+                <div className={css["input-box"]}>
+                  <Field type="text" placeholder="Email" name="email" />
+                  <PersonRoundedIcon fontSize="medium" className={css.icon} />
+                </div>
+
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className={css.error}
+                />
+
+                <div className={css["input-box"]}>
+                  <Field
+                    placeholder="Password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                  />
+                  <div onClick={() => setShowPassword((prev) => !prev)}>
+                    <LockRoundedIcon
+                      fontSize="small"
+                      className={classNames(css.icon, css["visible-password"])}
+                    />
+                  </div>
+                </div>
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className={css.error}
+                />
+
+                <button
+                  className={isSubmitting ? css.disabled : ""}
+                  disabled={isSubmitting}
+                >
+                  Register
+                </button>
+
+                <div className={css["registration-link"]}>
+                  <p className={css["registration-message"]}>Existing User</p>
+                  <NavLink to="/login">Login</NavLink>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
-    </div>
+      <Snackbar
+        open={showErrorToast}
+        className={css.snackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ width: "100%" }}
+        autoHideDuration={4000}
+        onClose={() => setShowErrorToast(false)}
+      >
+        <Alert
+          severity="error"
+          onClose={() => setShowErrorToast(false)}
+        >
+          Email already registered.
+        </Alert>
+      </Snackbar>
+    </>
   );
 };

@@ -33,8 +33,8 @@ export const getComparator = <Key extends keyof any>(
   order: GridSortDirection,
   orderBy: Key
 ): ((
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
+  a: { [key in Key]: number | string | null },
+  b: { [key in Key]: number | string | null}
 ) => number) =>
   order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)

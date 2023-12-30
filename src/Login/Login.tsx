@@ -13,7 +13,7 @@ import css from "./Login.module.css";
 // Types
 import { LoginType } from "../Types/User.type";
 import classNames from "classnames";
-import { Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import { LoginValidationSchema } from "../../assets/utils/constants";
 
 export const Login = () => {
@@ -36,10 +36,11 @@ export const Login = () => {
         sessionStorage.setItem("isLoggedIn", "LOGGED_IN");
         navigate("/");
       } else {
-        setShowErrorToast(true);
+        throw new Error("Wrong credentials");
       }
     } catch (error) {
       console.error(error);
+      setShowErrorToast(true);
     }
   };
 
@@ -64,7 +65,11 @@ export const Login = () => {
                   <PersonRoundedIcon fontSize="medium" className={css.icon} />
                 </div>
 
-                <ErrorMessage name="email" component="div" className="error" />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className={css.error}
+                />
 
                 <div className={css.inputBox}>
                   <Field
@@ -101,14 +106,19 @@ export const Login = () => {
           </Formik>
         </div>
       </div>
+
       <Snackbar
         open={showErrorToast}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
         className={css.snackbar}
         sx={{ width: "100%" }}
         autoHideDuration={4000}
         onClose={() => setShowErrorToast(false)}
-        message="Something went wrong. Please try again."
-      />
+      >
+        <Alert severity="error" onClose={() => setShowErrorToast(false)}>
+          Wrong credentials
+        </Alert>
+      </Snackbar>
     </>
   );
 };

@@ -34,6 +34,10 @@ export const BookValidationSchema = object({
   quantity: number()
     .max(2000, "Quantities can't be greater than 2000")
     .required("Quantity is required"),
+  publishedAt: number()
+    .max(2023, "Published year can't be greater than 2023")
+    .min(1000, "Published year can't be less than 1000")
+    .required("Published year is required"),
   publisher: string().required("Publisher name is Required"),
   rating: number()
     .max(5, "Rating can't be greater than 5")
@@ -94,6 +98,12 @@ export const BookFields: InputType[] = [
     dropdownOptions: BOOK_LANGUAGES,
   },
   { label: "Publisher", name: "publisher", type: "text" },
+  {
+    label: "Published Year",
+    name: "publishedAt",
+    type: "number",
+    minMaxValues: [1000, 2023],
+  },
   { label: "Rating", name: "rating", type: "number", minMaxValues: [0, 5] },
 ];
 
@@ -134,5 +144,9 @@ export const BOOK_DETAILS_TO_SHOW: { label: string; value: keyof BookType }[] =
     {
       label: "Rating",
       value: "rating",
+    },
+    {
+      label: "Published Yr",
+      value: "publishedAt",
     },
   ];
